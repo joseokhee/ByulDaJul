@@ -7,12 +7,14 @@ import time
 import urllib3
 import jsonlines
 from glob import glob
+import logging
+import sys
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--api_key', type=str, default='', help='etri api key')
-    parser.add_argument('--directory', type=str, default='output', help='JSON storage directory')
+    parser.add_argument('--directory', type=str, default='raw_data/output', help='JSON storage directory')
     parser.add_argument('--input', type=str, default='', help='input jsonl file path')
     parser.add_argument('--first_index', type=int, default=0, help='First index of articles')
     parser.add_argument('--last_index', type=int, default=42803, help='Last (latest) index of articles')
@@ -23,7 +25,8 @@ def main():
     input = args.input
     first_index = args.first_index
     last_index = args.last_index
-
+    
+    
     # Initialize directory
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -62,8 +65,8 @@ def do_lang ( openapi_key, text ) :
     if json_result == -1:
         json_reason = json_data["reason"]
         if "Invalid Access Key" in json_reason:
-            logger.info(json_reason)
-            logger.info("Please check the openapi access key.")
+            print(json_reason)
+            print("Please check the openapi access key.")
             sys.exit()
         return "openapi error - " + json_reason
     else:
